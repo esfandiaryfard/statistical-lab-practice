@@ -1,0 +1,50 @@
+---
+title: "Exercise 06"
+description: 
+  "Create an R Notebook which explains how to compute the volume of a        pyramid (you can use the web to get help!). Use headers to define         sections and subsections and R cells to input code and show the results    of the computations. Try to break the computations into different parts    (avoid a single long R cell) to guide the reader. This is how you will    learn to present R data analyses."
+output:
+  html_document:
+    df_print: paged
+  word_document: default
+  pdf_document: default
+---
+
+# Introduction
+A pyramid is a solid and its volume represents the amount of space it occupies. In general, its base can be any polygon, but we will see only the case of a square pyramid, i.e., a pyramid with a square base. The general formula for computing the volume of a Pyramid is as follows:
+
+$$ V = \frac{1}{3} Bh $$
+
+where $B$ is the area of the base and h is the height of the pyramid.
+
+## Example
+Find the volume of a regular square pyramid with base sides $10cm$ and height $18cm$.
+
+Let's first compute $B$:
+
+$$ B = 10 cm \times 10 cm = 100 cm^2 $$
+
+Let's now apply the formula to compute the volume:
+
+
+$$ V = \frac{1}{3} B h = \frac{1} {3} 100 cm^2 \times 18 cm $$
+
+### R code
+Let's see how to do it in R code. We first assign values to the *s* and *h* variables:
+
+```{r}
+s <- 10
+h <- 18
+```
+
+We now compute the area of the base:
+
+```{r}
+B <- s * s
+```
+
+Finally, we compute the volume using the formula discussed above:
+
+```{r}
+(V <- (1/3) * B * h)
+```
+
