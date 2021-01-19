@@ -1,0 +1,21 @@
+---
+title: "R function"
+output: html_notebook
+---
+lapply:
+```{r}
+l <-list(1,3,6,8)
+a <- function(x){x+1}
+b<-lapply(l, a)
+b
+```
+use sapply if you want a vector output.
+Note this if you want decimal numbers:
+```{r}
+sprintf("%0.2f",10/3)
+sprintf("%05.2f",10/3)
+sprintf("%05.3f",10/3)
+sprintf("%06.3f",10/3)
+sprintf("%0.0f",10/3)
+```
+

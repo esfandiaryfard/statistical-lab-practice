@@ -1,0 +1,122 @@
+---
+title: "Exam example"
+author: "Anahita Esfandiaryfard"
+output: 
+  pdf_document: default
+  html_notebook: default
+---
+# Data
+```{r}
+winequality <-read.csv("http://archive.ics.uci.edu/ml/machine-learning-databases/wine-quality/winequality-white.csv",sep = ";")
+```
+# Question1
+```{r}
+str(winequality)
+```
+The dataframe contains 4898 data and 12 variables.We can check if there are any 
+na value as follows,
+```{r}
+any(is.na(winequality))
+```
+The dataframe does not contain any na values.
+# Question2
+The following code will add the high.quality column and transform it into a 
+factor
+```{r}
+winequality$high.quality <- factor (as.integer(winequality$quality>6))
+```
+we check the number of level in high.quality as follows:
+```{r}
+levels(winequality$high.quality)
+```
+The column has two levels.
+Due to its definitions, the columns has two levels: 0 and 1.
+
+# Question 3
+```{r}
+library(ggplot2)
+ggplot(winequality, aes(x=alcohol, color=high.quality))+stat_ecdf()
+```
+from the curve we can note that high wine has more alcohol.
+
+# Question 4
+```{r}
+ggplot(winequality, aes(x=quality, y=alcohol, fill= factor(quality))) + 
+  geom_boxplot(notch = T)
+```
+High quality wines contains more alcohol, Also low quality wines (3-4) tend to 
+contain marginally more alcohol as compared to quality 5.
+# Question 5
+The following code compute the correlation matrix.removing the last two columns 
+which are factors:
+```{r}
+c <- cor(winequality[-c(12,13)])
+c
+```
+# Question 6
+To easily check what is the strongest relationship, I will use corrplot:
+```{r}
+library(corrplot)
+corrplot.mixed(c)
+```
+The pair with the strongest correlation is residual.sugar-density.This is positive 
+strong positive correlation.  
+```{r}
+cor.test(winequality$density, winequality$residual.sugar)
+```
+The p-value is below the significant level so the alternative hypothesis will be 
+rejected.The correlation is significantly significant.
+
+
+# Question 7
+Let us first subset the dataset to separate low and high quality wines:
+
+```{r}
+high.quality.wines <- subset(winequality, high.quality==1)
+low.quality.wines <- subset(winequality, high.quality==0)
+```
+
+The average amount of alcohol in high quality wines is:
+
+```{r}
+mean(high.quality.wines$alcohol)
+```
+
+The average amount of alcohol in low quality wines is:
+
+```{r}
+mean(low.quality.wines$alcohol)
+```
+It looks like high quality wines have more alcohol. Let us check that with a statistical test:
+
+```{r}
+t.test(high.quality.wines$alcohol, low.quality.wines$alcohol)
+```
+
+The p-value is below the significance level, so the difference between the means is actually statistically significant.
+
+Let us fit the regressor:
+# Question 8
+```{r}
+(reg <- lm(density ~ residual.sugar, winequality))
+```
+We expect a density equal to 0.99 when observing a value of residual.sugar equal to 0.
+
+# Question 9 
+ we will use the summary function to show the summary of the regresor:
+```{r}
+summary(reg)
+```
+ the linear regresor is statistically significant because the p-value of the F-test is below the significance threshold of 0.05. Moreover, all estimates of the coefficients are statistically significant. Indeed, their p-values are smaller than the threshold of 0.05.
+ 
+ # Question 10
+```{r}
+library(ggResidpanel)
+resid_panel(reg, plots="resid")
+```
+ Let us check the standard deviation of the dependent variable to have an idea on the scale of the values:
+```{r}
+sd(winequality$density)
+```
+ As compared to the standard deviation, some of the residuals in the plot are not very small. However, the residual are more or less random, even if not perfectly so. We can say that the fit is not perfectly linear, but still reasonable, as also confirmed by the $R^2$ value of about $0.7$ that we obtained from the summary before.
+

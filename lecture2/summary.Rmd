@@ -1,0 +1,43 @@
+---
+title: "R Vector"
+output: html_notebook
+---
+To create a vector in R:
+```{r}
+(vector <- c(1:10))
+class(vector)
+(vec.char <-c("Hello","World"))
+class(vec.char)
+(vec.logic <-c(T,F,T,T))
+class(vec.logic)
+```
+And to repeat this vector:
+```{r}
+rep(vector, 3)
+```
+To know if a value exists in vector:
+```{r}
+1 %in% vector
+11 %in% vector
+```
+To create a matrix in R:
+```{r}
+m<-matrix(vector, nrow = 5, byrow = TRUE)
+colnames(m) <- c("one", "two")
+row.names(m) <- c("a", "b", "c", "d", "e")
+m
+matrix(vector, nrow = 5, byrow = FALSE)
+```
+# Operramds:
+```{r}
+colSums(m)
+```
+```{r}
+rowSums(m)
+```
+```{r}
+colMeans(m)
+```
+```{r}
+rowMeans(m)
+```

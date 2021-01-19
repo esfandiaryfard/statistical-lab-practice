@@ -1,0 +1,75 @@
+---
+title: "R Data frame"
+output: html_notebook
+---
+To define datafarme:
+```{r}
+df <-data.frame(
+  row.names =c("x001","x018", "x026", "x016", "x019", "x012", "x009", "x003"),
+  Maths =c(8,9,7,9,10,9,6,NA),
+  Geography =c(9,NA,9,8,9,6,5,6),
+  English =c(7,8,9,NA,6,7,9,8),
+  Physics =c(9,7,7,7,8,8,6,10),
+  Chemistry =c(6,8,7,7,9,9,NA,8),
+  Sex=factor(
+    c("Male",'Male','Female', "Male", "Male", "Male", "Female", "Female"))
+  )
+df
+str(df)
+```
+to remove row:
+```{r}
+df[c("Maths","Geography")]
+```
+```{r}
+df[-6]
+```
+
+```{r}
+df[colnames(df)!="Chemistry"]
+```
+to add column:
+```{r}
+df['Average'] <-rowMeans(df[-6])
+df
+```
+```{r}
+df<- cbind(df, Average=rowMeans(df[-6]))
+df
+```
+to add row:
+```{r}
+df['x015',]<- c(6, NA, NA, 8, 9, 'Male', NA, NA)
+df
+```
+```{r}
+new.row <-data.frame(
+  Maths = 6,
+  Geography = NA,
+  English = NA,
+  Physics = 8,
+  Chemistry = 9,
+  Sex ='Male'
+  )
+df<-rbind(df, 'x015'=new.row)
+df
+```
+for filtering:
+```{r}
+subset(df, Maths==9)
+```
+for finding and removing null values:
+```{r}
+is.na(df)
+```
+```{r}
+any(is.na(df))
+```
+```{r}
+na.omit(df)
+```
+```{r}
+df[is.na(df)]<-0
+df
+```
+

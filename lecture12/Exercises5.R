@@ -1,3 +1,6 @@
+#Compare the distributions of survived and non survived passengers in the three classes using stacked plots.
+#The plot should look as the following one
+
 library(ggplot2)
 library(titanic)
 

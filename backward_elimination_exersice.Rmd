@@ -1,0 +1,202 @@
+---
+title: "Linear Regression exercise"
+output: html_notebook
+---
+
+# Exercise 1
+
+Consider the titanic dataset. Fit a linear regressor to predict the values of 
+Fare from the values of Survived,Pclass, Sex and Age
+
+```{r}
+library(titanic)
+(reg <- lm(Fare ~ Survived+Pclass+Sex+Age, titanic_train))
+summary(reg)
+library(ggResidpanel)
+ggResidpanel::resid_panel(reg, plots = c('resid'))
+
+(reg <- lm(Fare ~ Pclass + Sex + Age, titanic_train))
+summary(reg)
+ggResidpanel::resid_panel(reg, plots=c('resid'))
+```
+
+# Exercise 2
+Repeat the previous exercise using backward elimination. Is the final set of variables different from the one found in the previous exercise.
+```{r}
+(reg <- lm(
+  Fare ~ PassengerId+Survived+Pclass+Sex+Age+SibSp+Parch+Ticket+Cabin+Embarked, 
+  titanic_train
+  ))
+summary(reg)
+```
+The variable Ticket has the higher p value 0.99, lets remove it and fit the 
+model again:
+```{r}
+(reg <- lm(
+  Fare ~ PassengerId+Survived+Pclass+Sex+Age+SibSp+Parch+Cabin+Embarked, 
+  titanic_train
+  ))
+summary(reg)
+
+```
+```{r}
+(reg <- lm(
+  Fare ~ PassengerId+Survived+Pclass+Sex+Age+SibSp+Parch+Embarked, 
+  titanic_train
+  ))
+summary(reg)
+```
+```{r}
+(reg <- lm(
+  Fare ~ Survived+Pclass+Sex+Age+SibSp+Parch+Embarked, 
+  titanic_train
+  ))
+summary(reg)
+```
+```{r}
+(reg <- lm(
+  Fare ~ Survived+Pclass+Sex+Age+SibSp+Parch, 
+  titanic_train
+  ))
+summary(reg)
+```
+```{r}
+(reg <- lm(Fare ~ Pclass+Sex+Age+SibSp+Parch, titanic_train))
+summary(reg)
+```
+All variables are now statistically relevant. The backward elimination process 
+is finished. We can now conclude showing the residual plot:
+```{r}
+resid_panel(reg, plot='resid')
+```
+The residual are overall random (even if not perfectly so). The result is 
+acceptable.
+
+# Exercise 3
+Consider the titanic dataset. Fit a linear regressor to predict the values of 
+Age from the values of Survived, Pclass, Sex and Fare.
+```{r}
+(reg <- lm(Age ~ Survived+Pclass+Sex+Fare, titanic_train))
+summary(reg)
+```
+Sex is a irrelevant variable so lets remove it:
+```{r}
+(reg <- lm(Age ~ Survived+Pclass+Fare, titanic_train))
+summary(reg)
+```
+
+# Exercise 4
+Repeat the previous exercise using backward elimination. Is the final set of 
+variables different from the one found in the previous exercise
+one found in the previous exercise.
+```{r}
+(reg <- lm(
+  Age ~ PassengerId+Survived+Pclass+Sex+Fare+SibSp+Parch+Ticket+Cabin+Embarked, 
+  titanic_train
+  ))
+summary(reg)
+```
+```{r}
+(reg <- lm(
+  Age ~ PassengerId+Survived+Pclass+Sex+Fare+SibSp+Parch+Cabin+Embarked, 
+  titanic_train
+  ))
+summary(reg)
+```
+```{r}
+(reg <- lm(
+  Age ~ PassengerId+Survived+Pclass+Sex+Fare+SibSp+Parch+Embarked, 
+  titanic_train
+  ))
+summary(reg)
+```
+```{r}
+(reg <- lm(
+  Age ~ Survived+Pclass+Sex+Fare+SibSp+Parch+Embarked, 
+  titanic_train
+  ))
+summary(reg)
+```
+```{r}
+(reg <- lm(
+  Age ~ Survived+Pclass+Fare+SibSp+Parch+Embarked, 
+  titanic_train
+  ))
+summary(reg)
+```
+```{r}
+(reg <- lm(
+  Age ~ Survived+Pclass+Fare+SibSp+Parch, 
+  titanic_train
+  ))
+summary(reg)
+```
+```{r}
+(reg <- lm(
+  Age ~ Survived+Pclass+Fare+SibSp, 
+  titanic_train
+  ))
+summary(reg)
+```
+
+# Exercise 5
+Consider the Boston dataset. Fit a linear regressor to predict the values of 
+crim from the values of the other variables.
+```{r}
+library(MASS)
+str(Boston)
+Boston$chas<-factor(Boston$chas)
+levels(Boston$chas)
+Boston$rad<-factor(Boston$rad)
+levels(Boston$rad)
+(reg <- lm(
+  crim ~ zn+indus+chas+nox+rm+age+dis+rad+tax+ptratio+black+lstat+medv, 
+  Boston
+  ))
+summary(reg)
+```
+remove irelevent value starting from the most p value:
+```{r}
+(reg <- lm(
+  crim ~ zn+indus+chas+nox+rm+dis+rad+tax+ptratio+black+lstat+medv, 
+  Boston
+  ))
+summary(reg)
+```
+```{r}
+(reg <- lm(
+  crim ~ zn+indus+chas+nox+rm+dis+tax+ptratio+black+lstat+medv, 
+  Boston
+  ))
+summary(reg)
+```
+```{r}
+(reg <- lm(
+  crim ~ zn+indus+chas+nox+rm+dis+tax+black+lstat+medv, 
+  Boston
+  ))
+summary(reg)
+```
+```{r}
+(reg <- lm(
+  crim ~ zn+indus+nox+rm+dis+tax+black+lstat+medv, 
+  Boston
+  ))
+summary(reg)
+```
+```{r}
+(reg <- lm(
+  crim ~ zn+indus+rm+dis+tax+black+lstat+medv, 
+  Boston
+  ))
+summary(reg)
+```
+```{r}
+(reg <- lm(
+  crim ~ zn+indus+dis+tax+black+lstat+medv, 
+  Boston
+  ))
+summary(reg)
+```
+
+

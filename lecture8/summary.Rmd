@@ -1,0 +1,83 @@
+---
+title: "R Data visualization"
+output: html_notebook
+---
+
+# To plot a graph:
+
+```{r}
+f <-function(x) {sin(x)**2/(x+1)}
+x <-seq(0,10,length=35)
+plot(x,f(x), type='b', xlab='Time', ylab='Amplitude', col='red')
+lines(x+0.5,f(x), type='b', xlab='Time', ylab='Amplitude', col='blue', lty=2)
+grid() #this adds a grid to the plot
+legend("topright",
+       legend=c("Original", "Shifted"),col=c("red", "blue"),lty=c(1,2)) #legend position
+```
+
+# Point plot
+```{r}
+library(ggplot2)
+ggplot(data = mpg)+
+  geom_point(mapping =aes(x = displ, y = hwy, color=class, shape=fl, size=cyl))+
+  xlab('Engine Size')+
+  ylab('Miles per gallon')+
+  ggtitle("drv=='f'")+
+  facet_wrap(vars(drv), labeller = label_both, ncol = 2)
+```
+```{r}
+ggplot(data = mpg, mapping = aes(x=displ, y=hwy))+
+  geom_point()+
+  facet_grid(cols=vars(cyl))+
+  geom_smooth()
+```
+```{r}
+ggplot(data = mpg, mapping = aes(x=displ, y=hwy))+
+  geom_point()+
+  geom_smooth(aes(color=drv, linetype=drv))+
+  theme_minimal()
+```
+
+# Bar plot
+```{r}
+library(titanic)
+library(ggplot2)
+titanic_train$Pclass<-factor(titanic_train$Pclass)
+ggplot(titanic_train,aes(x=Pclass))+
+  geom_bar(aes(y=(..count..)/sum(..count..),fill=Pclass))+
+  scale_y_continuous(labels=scales::percent)+
+  facet_wrap(vars(Sex))+
+  ylab('percentage')
+```
+```{r}
+ggplot(titanic_train,aes(x=Sex))+
+  geom_bar(aes(y=(..count..)/sum(..count..),fill=Pclass))+
+  scale_y_continuous(labels=scales::percent)+
+  ylab('percentage')
+```
+```{r}
+ggplot(titanic_train,aes(x=Pclass))+
+  geom_bar(aes(y=(..count..)/sum(..count..),fill=Sex))+
+  scale_y_continuous(labels=scales::percent)+
+  ylab('percentage')
+```
+```{r}
+ggplot(titanic_train,aes(x=Sex, fill=Pclass))+
+  geom_bar(aes(y=(..count..)/sum(..count..)), position='dodge')+
+  scale_y_continuous(labels=scales::percent)+
+  ylab('percentage')
+```
+```{r}
+
+```
+# Pychart
+```{r}
+ggplot(titanic_train, aes(y="",fill=Pclass))+
+  geom_bar(position='fill')+
+  scale_x_continuous(labels=scales::percent)+
+  ylab('Percentage')+
+  xlab('Survived Passengers')+
+  coord_polar()+
+  facet_wrap(vars(Survived), labeller = label_both)
+```
+

@@ -1,0 +1,155 @@
+---
+title: "Statistical Laboratory Exam - 18/1/21"
+author: "Anahita Esfandiaryfard"
+output:
+  pdf_document: default
+  html_notebook: default
+  word_document: default
+---
+
+# Data
+```{r}
+View(rock)
+(?rock)
+```
+
+# Question 1
+```{r}
+summary(rock)
+```
+According to the result Area with 7487 has the most median
+
+# Question 2
+The following code will add the high.perm column and transform it into a factor:
+
+```{r}
+rock$high.perm <- factor(as.integer(rock$perm>median(rock$perm)))
+```
+we can check the results like below:
+```{r}
+levels(rock$high.perm)
+```
+And to see data in each group:
+```{r}
+summary(rock$high.perm)
+```
+
+As the results shows there are 24 values in each group, because median divides 
+the data in two equal parts
+
+# Question 3
+```{r}
+library(ggplot2)
+ggplot(rock, aes(x=high.perm, y=area, fill=high.perm)) +
+  geom_boxplot(notch=T)
+```
+As the plots shows the median of two values are significantly different to each 
+other, the value of group 0 of high.perm is higher than group1 so the group1 
+includes more area.
+
+# Question 4
+```{r}
+(n_rice <- round(2*nrow(rock)**(1/3)))
+ggplot(rock, aes(x=area, fill=high.perm)) +
+  geom_histogram(bins=n_rice)
+```
+The histogram shows the same result as before as we can see here group 0 has 
+more area than 1.
+
+# Question 5
+The following code computes the correlation matrix removing the last columns 
+which is high.perm:
+
+```{r}
+(c <- cor(rock[-c(5)]))
+```
+The correlation plot is as follow:
+
+```{r}
+library(corrplot)
+corrplot.mixed(c)
+```
+
+# Question 6
+The pair with the strongest correlation is area - peri. This is a strong 
+positive correlation (0.82).
+
+To check the corelation:
+```{r}
+cor.test(rock$area, rock$peri)
+```
+The p-value is below the significance level, so the alternative hypothesis can 
+be rejected. The correlation is statistically significant.
+
+# Question 7
+
+Let us first subset the dataset to separate low and high quality wines:
+
+```{r}
+up.high.perm <- subset(rock, high.perm==1)
+down.high.perm <- subset(rock, high.perm==0)
+```
+
+The mean of two samples is:
+
+```{r}
+mean(up.high.perm$peri)
+```
+```{r}
+mean(down.high.perm$peri)
+```
+It looks like down high.perm has the most mean. 
+
+# Question 8
+
+```{r}
+t.test(up.high.perm$peri, down.high.perm$peri)
+```
+
+The p-value is below the significance level, so the difference between the 
+means is actually statistically significant.
+
+# Question 9
+Let us fit the regressor:
+```{r}
+(reg <- lm(perm ~ area+peri+shape, rock))
+```
+
+To check if regression is a good fit we use summary:
+
+```{r}
+summary(reg)
+```
+The linear regressor is not really good statistically significant because 
+F-statistic is not below the threshold of 0.5 but p-value is significantly less. 
+some parameter like shape seems not relevant as it has high p value and no * 
+in front of it
+
+# Question 10
+First lets plot the residual of current regression:
+```{r}
+library(ggResidpanel)
+resid_panel(reg, plots="resid")
+```
+Now To do a backward elimination first we need to do the regression from all 
+variables in the dataset:
+```{r}
+reg1 <- lm(perm ~ area+peri+shape, rock)
+summary(reg1)
+```
+From the result we can see that shape is not really relevant now we should 
+eliminate the parameter with highest p value which in this case is shape also.
+
+```{r}
+reg1 <- lm(perm ~ area+peri, rock)
+summary(reg1)
+```
+All variables are now statistically relevant. The backward elimination process 
+is finished. We can now conclude showing the residual plot:
+```{r}
+library(ggResidpanel)
+resid_panel(reg1, plots="resid")
+```
+In Compare the two plot it can conclude that the second one is the best fit 
+among variables.As the regression line in between more data than last part.
+

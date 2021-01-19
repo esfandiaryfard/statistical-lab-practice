@@ -1,3 +1,7 @@
+#Use pie charts to compare the distributions of males and females in the three classes and depending on
+#whether passengers survived. Use facet_grid to break by Survived and Pclass. The plot should look as
+#follows
+
 library(ggplot2)
 library(titanic)
 

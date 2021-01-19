@@ -1,0 +1,11 @@
+---
+title: "R Data Manipulation"
+output: html_notebook
+---
+Aggregate:
+
+```{r}
+levels(infert$education)
+aggregate(infert['age'], list(education=infert$education), mean, na.rm=T)
+aggregate(infert['age'], list(education=infert$education), max, na.rm=T)
+```
